@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control del Brazo Robótico</title>
+    <!-- Incluir Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container">
+        <h1 class="mt-4 mb-4">Control del Brazo Robótico</h1>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary mb-2" onmousedown="startMoving('D')" onmouseup="stopMoving()" ontouchstart="startMoving('D')" ontouchend="stopMoving()">Base -</button>
+                <button class="btn btn-secondary mb-2" onmousedown="startMoving('A')" onmouseup="stopMoving()" ontouchstart="startMoving('A')" ontouchend="stopMoving()">Base +</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary mb-2" onmousedown="startMoving('S')" onmouseup="stopMoving()" ontouchstart="startMoving('S')" ontouchend="stopMoving()">Hombro -</button>
+                <button class="btn btn-secondary mb-2" onmousedown="startMoving('W')" onmouseup="stopMoving()" ontouchstart="startMoving('W')" ontouchend="stopMoving()">Hombro +</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary mb-2" onmousedown="startMoving('Q')" onmouseup="stopMoving()" ontouchstart="startMoving('Q')" ontouchend="stopMoving()">Codo -</button>
+                <button class="btn btn-secondary mb-2" onmousedown="startMoving('E')" onmouseup="stopMoving()" ontouchstart="startMoving('E')" ontouchend="stopMoving()">Codo +</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary mb-2" onmousedown="startMoving('F')" onmouseup="stopMoving()" ontouchstart="startMoving('F')" ontouchend="stopMoving()">Muñeca Vertical -</button>
+                <button class="btn btn-secondary mb-2" onmousedown="startMoving('R')" onmouseup="stopMoving()" ontouchstart="startMoving('R')" ontouchend="stopMoving()">Muñeca Vertical +</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary mb-2" onmousedown="startMoving('G')" onmouseup="stopMoving()" ontouchstart="startMoving('G')" ontouchend="stopMoving()">Muñeca Rotación -</button>
+                <button class="btn btn-secondary mb-2" onmousedown="startMoving('T')" onmouseup="stopMoving()" ontouchstart="startMoving('T')" ontouchend="stopMoving()">Muñeca Rotación +</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary mb-2" onmousedown="startMoving('H')" onmouseup="stopMoving()" ontouchstart="startMoving('H')" ontouchend="stopMoving()">Gripper -</button>
+                <button class="btn btn-secondary mb-2" onmousedown="startMoving('Y')" onmouseup="stopMoving()" ontouchstart="startMoving('Y')" ontouchend="stopMoving()">Gripper +</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startMoving(letter) {
+            sendCommand(letter);
+            console.log(letter);
+        }
+
+        function stopMoving() {
+            sendCommand('P');
+            console.log('P');
+        }
+
+        function sendCommand(command) {
+            fetch('http://192.168.2.200:5000/control', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ command: command }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Error al enviar el comando');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
